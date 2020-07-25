@@ -3,7 +3,7 @@ version: '2'
 services:
     app:
         build: .
-        container_name: my-app
+        container_name: walkInSchedule-app
         environment:
             - NODE_ENV=development
             - PORT=3000

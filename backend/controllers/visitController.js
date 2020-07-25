@@ -17,7 +17,7 @@ export const addNewVisit = async(request, response) => {
             {
                 //create a new visit and update token
                 const count = await visit.countDocuments({
-                    docId: request.body.docId
+                    doctorId: request.body.doctorId
                  });
                 token = count+1;
                 let newVisit = {
@@ -60,15 +60,4 @@ export const getAllVisits = (request, response) => {
 export const updateVisitStatus = async(visitId, visitStatus) =>
 {
     return await visit.findOneAndUpdate({_id : visitId}, {$set:{status:visitStatus, updatedOn: Date.now()}});
-};
-
-/* To update token field in collection*/
-const updateToken = async(visitId, token) =>
-{
-    return await visit.findOneAndUpdate({_id : visitId}, {$set:{token:token, updatedOn: Date.now()}});
-};
-
-const getVisitsByDocId = async(docId) => {
-    let visits = await visit.findById(docId);
-    return visits;
 };

@@ -14,7 +14,6 @@ export const scheduleWalkIn = async(visit) => {
         let qObject = new Queue(qName, process.env.REDIS_URL);    
         //Add newly created queue to the list of available queues. 
         global.qMap.set(visit.doctorId, qObject); 
-        console.log(visit);
         //Add incoming visit request to the corresponding pracitioner queue.
         await qObject.add(visit);
         addQueueInfoForArena(qName, practitioner.specialty);

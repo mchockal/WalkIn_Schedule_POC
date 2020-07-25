@@ -24,9 +24,10 @@ export const listenToEvents = async(queue) => {
 
 const activeHandler = (job) => {
     updateVisitStatus(job.data._id, "In Progress");
-    console.log("You are now in session with your practitioner, token #"+ job.data.token);
+    console.log(`You are now in session with doctor ${job.data.doctorId} - token #${job.data.token}`);
     //This will be a notification sent to everyone in frontend waiting on their pracitioner  
-    console.log("Next up, token #"+ job.data.token+1); 
+    let token = job.data.token+1;
+    console.log(`Next up for doctor ${job.data.doctorId} token #${token}`); 
     //Alert next patient in queue
 }
 
@@ -37,6 +38,6 @@ const failHandler = (job, err) => {
 
 const completedHandler = (job, result) => {
     updateVisitStatus(job.data._id, "Completed");
-    console.log("Encounter complete for token #"+ job.data.token);  
+    console.log(`Encounter complete for doctor ${job.data.doctorId} and token #${job.data.token}`);  
     //Do something with result
 }
