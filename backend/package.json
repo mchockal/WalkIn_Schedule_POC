@@ -1,0 +1,26 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "A POC for 'walk-in' appointment scheduling with your doctor",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "debug": "nodemon --inspect index.js",
+    "start": "nodemon index.js",
+    "dev": "nodemon index.js",
+    "worker": "node worker.js",
+    "worker:dev": "nodemon worker.js"
+  },
+  "author": "Meena",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "bull": "^3.16.0",
+    "bull-arena": "^2.8.1",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "mongoose": "^5.9.7",
+    "nodemon": "^2.0.2",
+    "redis": "^3.0.2"
+  }
+}

@@ -1,0 +1,23 @@
+# docker-compose.yml
+version: '2'
+services:
+    app:
+        build: .
+        container_name: my-app
+        environment:
+            - NODE_ENV=development
+            - PORT=3000
+            - REDIS_URL=redis://my-cache
+        command: "sh -c 'npm i && npm run dev'"
+        volumes:
+            - .:/var/www/app
+        links:
+            - redis
+        ports:
+            - "3000:3000"
+
+    redis:
+        image: redis
+        container_name: my-cache
+        expose:
+            - "6379"
