@@ -6,7 +6,7 @@ services:
         container_name: walkInSchedule-app
         environment:
             - NODE_ENV=development
-            - PORT=3000
+            - PORT=4000
             - REDIS_URL=redis://my-cache
         command: "sh -c 'npm i && npm run dev'"
         volumes:
@@ -14,7 +14,7 @@ services:
         links:
             - redis
         ports:
-            - "3000:3000"
+            - "4000:4000"
 
     redis:
         image: redis

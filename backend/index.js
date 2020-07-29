@@ -6,7 +6,7 @@ import routes from './routes/appRoutes.js';
 import Arena from 'bull-arena';
 
 const app = express();
-const PORT = process.env.PORT || 3000; 
+const PORT = process.env.PORT || 4000; 
 global.qMap = new Map();
 global.qArena = []; 
 

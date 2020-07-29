@@ -5,7 +5,7 @@ import { scheduleWalkIn } from '../utils/producer.js'
 import { updateLock, getCollectionIdByName } from './lockController.js';
 
 export const addNewVisit = async(request, response) => {
-    /*before any operation, first acquire lock on collection to exclusively work on it*/
+    /*before any operation,  acquire lock on collection to exclusively work on it*/
     let collectionId = await getCollectionIdByName("visit");
     let condition = true;
     let token;

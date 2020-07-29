@@ -12,7 +12,7 @@ const visitEncounter = async(visit) => {
      And next item(patient) in queue can be processed(addressed).
      */
     console.log("Do something and wait for : "+ visit.consultationTime);
-    await new Promise(resolve => setTimeout(resolve, 10000));
+    await new Promise(resolve => setTimeout(resolve, 20000));
     return 1;
 }
 
