@@ -1,6 +1,7 @@
 //practitionerController.js
 
 import { practitioner } from '../models/practitionerModel.js';
+import { visit } from '../models/visitModel.js';
 
 export const addNewPractitioner = async(request, response) => {
     const Practitioner = await practitioner.create(request.body);
@@ -23,6 +24,11 @@ export const getPractitionersBySpecialty = (request, response) => {
         }
         response.json(Practitioners);
     });
+};
+
+const getPractitionerIdBySpecialty = async(specialty) => {
+    let result = await practitioner.find({ specialty: specialty }, '_id');
+    return result;
 };
 
 export const getPractitionerById = async(docId) => {
@@ -49,4 +55,35 @@ export const getAllSpecialties = async(request, response) => {
         response.json(error);
     }
      
+}
+
+//Get doctorId with minimum number of tokens in their pipeline
+export const getNextAvailableDoctor = async(specialty) => {
+    try{
+
+        let practitioners = await getPractitionerIdBySpecialty(specialty);
+        practitioners = practitioners.map(function(practitioner) { return practitioner._id.toString(); });
+        let result = await visit.aggregate(
+            [
+                //Match doctorId for chosen specialtiy
+                { $match : 
+                    { doctorId : 
+                        { $in : practitioners,
+                }}} ,
+                // Grouping pipeline
+                { $group: { 
+                    _id: "$doctorId", 
+                    count:{$sum:1}
+                }},
+                // Sorting pipeline
+                { $sort: { "count": 1 } },
+                // limit results
+                { $limit: 1 }
+            ]);
+        return result[0]._id;
+    }
+    catch(error)
+    {
+        return error;
+    }   
 }

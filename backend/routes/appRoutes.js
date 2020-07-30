@@ -1,5 +1,5 @@
 import { addNewPatient, getAllPatients } from '../controllers/patientController.js';
-import { addNewPractitioner, getAllPractitioners, getAllSpecialties, getPractitionersBySpecialty } from '../controllers/pracititionerController.js'
+import { addNewPractitioner, getAllPractitioners, getAllSpecialties, getPractitionersBySpecialty, getNextAvailableDoctor } from '../controllers/pracititionerController.js'
 import { addNewVisit, getAllVisits} from '../controllers/visitController.js'
 
 const routes = (app) => {
@@ -20,6 +20,9 @@ const routes = (app) => {
     app.route('/visit')
         .post(addNewVisit)
         .get(getAllVisits);
+
+    app.route('/test')
+        .get(getNextAvailableDoctor);
 
 }
 export default routes;

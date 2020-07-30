@@ -87,7 +87,8 @@ export default class CreateNewVisit extends Component {
                                 return { value: practitioner._id, display: `${practitioner.fName} ${practitioner.lName}`}
                 });// [value: 5f18c07ba0a6f52a0cf93624, display: Vignesh Kannan]
                 this.setState({
-                    practitioners : [{value: '', display: '(Select practitioner)'}].concat(practitioners)
+                    practitioners : [{value: '', display: '(Select practitioner)'},
+                                     {value: 'Any', display: 'Any'}].concat(practitioners)
                 });
             })
             .catch((error) => {
@@ -107,11 +108,12 @@ export default class CreateNewVisit extends Component {
             doctorId : this.state.selectedPractitioner,
             patientId : this.state.selectedPatient,
             reasonForVisit  : this.state.reason,
-            consultationTime : this.state.selectedConsultTime
+            consultationTime : this.state.selectedConsultTime,
+            specialty : this.state.selectedSpecialty
 
         })
         .then(async(response) => {
-          if(response.status === 200 )
+          if(response.status === 200 )//Need to Check for error from server side as well
           {
             alert(response.data);
           }

@@ -3,10 +3,12 @@
 import { visit } from '../models/visitModel.js';
 import { scheduleWalkIn } from '../utils/producer.js'
 import { updateLock, getCollectionIdByName } from './lockController.js';
+import { getPractitionerById, getNextAvailableDoctor } from './pracititionerController.js'
 
 export const addNewVisit = async(request, response) => {
     /*before any operation,  acquire lock on collection to exclusively work on it*/
     let collectionId = await getCollectionIdByName("visit");
+    let doctorId;
     let condition = true;
     let token;
     try{
@@ -16,13 +18,21 @@ export const addNewVisit = async(request, response) => {
             if(false == condition)//findOneAndUpdate returns the old value. 
             {
                 //create a new visit and update token
+                if(request.body.doctorId == "Any")
+                {
+                    doctorId = await getNextAvailableDoctor(request.body.specialty);
+                    console.log(doctorId);
+                }
+                else {
+                    doctorId = request.body.doctorId;
+                }
                 const count = await visit.countDocuments({
-                    doctorId: request.body.doctorId
+                    doctorId: doctorId
                  });
                 token = count+1;
                 let newVisit = {
                     patientId : request.body.patientId,
-                    doctorId : request.body.doctorId,
+                    doctorId : doctorId,
                     consultationTime : request.body.consultationTime,
                     reasonForVisit : request.body.reasonForVisit,
                     token : token
@@ -37,7 +47,8 @@ export const addNewVisit = async(request, response) => {
             }
         }while(condition == true);
         //Push to queue and send the token number
-        response.json("Your token number : "+ token);
+        let practitioner = await getPractitionerById(doctorId);
+        response.json(`Your token number for your visit with doctor ${practitioner.fName} ${practitioner.lName} is ${token}`);
     }
     catch (error)
     {

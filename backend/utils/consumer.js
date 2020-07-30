@@ -1,4 +1,5 @@
 import { updateVisitStatus } from '../controllers/visitController.js';
+import { getPractitionerById } from '../controllers/pracititionerController.js'
 
 export const notifyWorker = async(queue) => {
     queue.process(async (job) => { 
@@ -22,12 +23,13 @@ export const listenToEvents = async(queue) => {
     queue.on("completed", completedHandler);
 }
 
-const activeHandler = (job) => {
+const activeHandler =async (job) => {
     updateVisitStatus(job.data._id, "In Progress");
-    console.log(`You are now in session with doctor ${job.data.doctorId} - token #${job.data.token}`);
+    let practitioner = await getPractitionerById(job.data.doctorId)
+    console.log(`You are now in session with doctor ${practitioner.fName} ${practitioner.lName} - token #${job.data.token}`);
     //This will be a notification sent to everyone in frontend waiting on their pracitioner  
     let token = job.data.token+1;
-    console.log(`Next up for doctor ${job.data.doctorId} token #${token}`); 
+    console.log(`Next up for doctor ${practitioner.fName} ${practitioner.lName}  : token #${token}`); 
     //Alert next patient in queue
 }
 
@@ -36,8 +38,9 @@ const failHandler = (job, err) => {
     //Retry here if needed after alerting the user.
 }
 
-const completedHandler = (job, result) => {
+const completedHandler = async(job, result) => {
     updateVisitStatus(job.data._id, "Completed");
-    console.log(`Encounter complete for doctor ${job.data.doctorId} and token #${job.data.token}`);  
+    let practitioner = await getPractitionerById(job.data.doctorId)
+    console.log(`Encounter complete for doctor ${practitioner.fName} ${practitioner.lName}  : token #${job.data.token}`); 
     //Do something with result
 }
